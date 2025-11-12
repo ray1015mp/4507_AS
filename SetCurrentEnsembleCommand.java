@@ -12,11 +12,10 @@ public class SetCurrentEnsembleCommand implements Command {
     @Override
     public void execute() {
         previousEnsemble = receiver.getCurrentEnsemble();
-        boolean success = receiver.setCurrentEnsemble(ensembleID);  // ✅ 檢查返回值
+        boolean success = receiver.setCurrentEnsemble(ensembleID);
         
         if (!success) {
-            // ✅ 失敗時拋出異常,防止加入 undo stack
-            throw new RuntimeException("Set ensemble failed");
+            throw new RuntimeException("Ensemble " + ensembleID + " not found");
         }
         
         newEnsemble = receiver.getCurrentEnsemble();

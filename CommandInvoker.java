@@ -16,16 +16,12 @@ public class CommandInvoker {
     
     try {
         command.execute();
-        
-        // ✅ 只有非 SetCurrentEnsembleCommand 才加入 undo stack
-        if (!(command instanceof SetCurrentEnsembleCommand)) {
-            undoStack.push(command);
-            redoStack.clear();
-        }
+        undoStack.push(command);
+        redoStack.clear();
     } catch (Exception e) {
-        System.out.println(e.getMessage());
-        }
+        System.out.println("Error: " + e.getMessage());
     }
+}
     
     public void undo() {
         if (undoStack.isEmpty()) {

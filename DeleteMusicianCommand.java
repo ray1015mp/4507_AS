@@ -20,7 +20,7 @@ public class DeleteMusicianCommand implements Command {
             musicianName = deletedMusician.getName();
             instrumentName = InstrumentHelper.getInstrumentName(targetEnsemble, deletedMusician.getRole());
             receiver.removeMusician(musicianID);
-            System.out.println("Musician is deleted.");  // ✅ 移到這裡
+            System.out.println("Musician is deleted.");
         }
     }
     

@@ -9,16 +9,6 @@ public class MEMSSystem {
         this.currentEnsemble = null;
     }
     
-    public void createEnsemble(String type, String ensembleID, String name) {
-        Ensemble ensemble = EnsembleFactory.createEnsemble(type, ensembleID);
-        ensemble.seteName(name);
-        ensembles.add(ensemble);
-        currentEnsemble = ensemble;
-        
-        String ensembleType = type.equalsIgnoreCase("o") ? "Orchestra" : "Jazz band";
-        System.out.println(ensembleType + " ensemble is created.");
-        System.out.println("Current ensemble is changed to " + ensembleID + ".");
-    }
     
     public boolean setCurrentEnsemble(String ensembleID) {
         for (Ensemble e : ensembles) {

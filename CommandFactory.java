@@ -12,7 +12,7 @@ public class CommandFactory {
                 return new ModifyMusicianCommand(system, params[0], Integer.parseInt(params[1]));
             case "d":
                 return new DeleteMusicianCommand(system, params[0]);
-            case "n":
+            case "cn":
                 return new ChangeEnsembleNameCommand(system, params[0]);
             case "p":
                 return new ShowEnsembleCommand(system);

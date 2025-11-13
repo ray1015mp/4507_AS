@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class DeleteMusicianCommand implements Command {
     private MEMSSystem receiver;
     private String musicianID;
@@ -5,6 +7,8 @@ public class DeleteMusicianCommand implements Command {
     private String musicianName;
     private String instrumentName;
     private Ensemble targetEnsemble;
+    private MusicianMemento memento;
+    private List<Musician> musicianListSnapshot;
     
     public DeleteMusicianCommand(MEMSSystem receiver, String musicianID) {
         this.receiver = receiver;
@@ -18,7 +22,15 @@ public class DeleteMusicianCommand implements Command {
 
         if (deletedMusician != null && targetEnsemble != null) {
             musicianName = deletedMusician.getName();
-            instrumentName = InstrumentHelper.getInstrumentName(targetEnsemble, deletedMusician.getRole());
+            memento = new MusicianMemento(deletedMusician);
+            instrumentName = InstrumentHelper.getInstrumentName(targetEnsemble, memento.getRole());
+            
+            musicianListSnapshot = new ArrayList<>();
+            Iterator<Musician> it = targetEnsemble.getMusicians();
+            while (it.hasNext()) {
+                musicianListSnapshot.add(it.next());
+            }
+            
             receiver.removeMusician(musicianID);
             System.out.println("Musician is deleted.");
         }
@@ -26,16 +38,30 @@ public class DeleteMusicianCommand implements Command {
     
     @Override
     public void undo() {
-        if (deletedMusician != null) {
-            receiver.addMusicianDirectly(deletedMusician);
+        if (deletedMusician != null && targetEnsemble != null && memento != null && musicianListSnapshot != null) {
+            memento.restore();
+            
+            Iterator<Musician> it = targetEnsemble.getMusicians();
+            List<Musician> toRemove = new ArrayList<>();
+            while (it.hasNext()) {
+                toRemove.add(it.next());
+            }
+            for (Musician m : toRemove) {
+                targetEnsemble.dropMusician(m);
+            }
+            
+            for (Musician m : musicianListSnapshot) {
+                targetEnsemble.addMusician(m);
+            }
+            
             System.out.println("Command (Delete musician, " + musicianID + ") is undone.");
         }
     }
     
     @Override
     public void redo() {
-        if (deletedMusician != null) {
-            receiver.removeMusician(musicianID);
+        if (deletedMusician != null && targetEnsemble != null) {
+            targetEnsemble.dropMusician(deletedMusician);
             System.out.println("Command (Delete musician, " + musicianID + ") is redone.");
         }
     }

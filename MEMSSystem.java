@@ -148,4 +148,20 @@ public class MEMSSystem {
         }
         return null;
     }
+
+    
+    public Ensemble findEnsemble(String ensembleID) {
+        for (Ensemble e : ensembles) {
+            if (e.getEnsembleID().equals(ensembleID)) {
+                return e;
+            }
+        }
+        return null;
+    }
+    
+    
+    public void setCurrentEnsemble(Ensemble ensemble) {
+        this.currentEnsemble = ensemble;
+    }
+
 }

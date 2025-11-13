@@ -1,7 +1,3 @@
-/**
- * ConcreteCreator for Orchestra Ensemble
- * 負責創建 Orchestra Ensemble
- */
 public class OrchestraCreator extends EnsembleCreator {
     
     @Override

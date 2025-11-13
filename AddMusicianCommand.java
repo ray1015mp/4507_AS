@@ -19,23 +19,23 @@ public class AddMusicianCommand implements Command {
         targetEnsemble = receiver.getCurrentEnsemble();
         addedMusician = receiver.addMusician(musicianID, name, instrumentRole);
         if (addedMusician != null && targetEnsemble != null) {
-            // ✅ 使用 InstrumentHelper
             instrumentName = InstrumentHelper.getInstrumentName(targetEnsemble, instrumentRole);
         }
     }
     
     @Override
     public void undo() {
-        if (addedMusician != null) {
-            receiver.removeMusician(musicianID);
+        if (addedMusician != null && targetEnsemble != null) {
+            targetEnsemble.dropMusician(addedMusician);
             System.out.println("Command (Add musician, " + musicianID + ", " + name + ", " + instrumentName + ") is undone.");
         }
     }
     
     @Override
     public void redo() {
-        if (addedMusician != null) {
-            receiver.addMusicianDirectly(addedMusician);
+        if (addedMusician != null && targetEnsemble != null) {
+            targetEnsemble.addMusician(addedMusician);
+            receiver.setCurrentEnsembleDirectly(targetEnsemble);
             System.out.println("Command (Add musician, " + musicianID + ", " + name + ", " + instrumentName + ") is redone.");
         }
     }

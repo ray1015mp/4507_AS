@@ -29,10 +29,10 @@ public class CommandInvoker {
             return;
         }
         
-        // ✅ Pop from undo stack and push to redo stack
+        
         Command command = undoStack.pop();
         command.undo();
-        redoStack.push(command);  // ← This is the key fix!
+        redoStack.push(command);  
     }
     
     public void redo() {
@@ -41,10 +41,9 @@ public class CommandInvoker {
             return;
         }
         
-        // ✅ Pop from redo stack and push back to undo stack
         Command command = redoStack.pop();
         command.redo();
-        undoStack.push(command);  // ← Push back to undo stack
+        undoStack.push(command);  
     }
     
     public void listCommands() {
@@ -52,7 +51,7 @@ public class CommandInvoker {
         if (undoStack.isEmpty()) {
             System.out.println("-- End of undo list --");
         } else {
-            // Print from top to bottom (reverse order)
+            
             List<Command> temp = new ArrayList<>(undoStack);
             for (int i = 0; i < temp.size(); i++) {
             System.out.println(temp.get(i).getDescription());
@@ -64,7 +63,7 @@ public class CommandInvoker {
         if (redoStack.isEmpty()) {
             System.out.println("-- End of redo list --");
         } else {
-            // Print from top to bottom (reverse order)
+            
             List<Command> temp = new ArrayList<>(redoStack);
             for (int i = 0; i < temp.size(); i++) {
             System.out.println(temp.get(i).getDescription());

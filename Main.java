@@ -56,29 +56,36 @@ public class Main {
             case "c":
                 command = handleCreateEnsemble(system, scanner);
                 break;
+                
             case "s":
-                command = handleSetCurrentEnsemble(system, scanner);
-                break;
+                
+                handleSetCurrentEnsemble(system, scanner);
+                return;
+                
             case "a":
                 command = handleAddMusician(system, scanner);
                 break;
+                
             case "m":
                 command = handleModifyMusician(system, scanner);
                 break;
+                
             case "d":
                 command = handleDeleteMusician(system, scanner);
                 break;
+                
             case "se":
-                // ✅ Query commands - execute directly without adding to undo stack
                 new ShowEnsembleCommand(system).execute();
                 return;
+                
             case "sa":
-                // ✅ Query commands - execute directly without adding to undo stack
                 new DisplayAllEnsemblesCommand(system).execute();
                 return;
+                
             case "cn":
                 command = handleChangeEnsembleName(system, scanner);
                 break;
+                
             default:
                 System.out.println("Invalid command.");
                 return;
@@ -102,11 +109,18 @@ public class Main {
         return CommandFactory.createCommand("c", system, type, ensembleID, name);
     }
     
-    private static Command handleSetCurrentEnsemble(MEMSSystem system, Scanner scanner) {
+    
+    private static void handleSetCurrentEnsemble(MEMSSystem system, Scanner scanner) {
         System.out.print("Please input ensemble ID:- ");
         String ensembleID = scanner.nextLine().trim();
         
-        return CommandFactory.createCommand("s", system, ensembleID);
+        Ensemble targetEnsemble = system.findEnsemble(ensembleID);
+        if (targetEnsemble != null) {
+            system.setCurrentEnsemble(targetEnsemble);
+            System.out.println("Changed current ensemble to " + ensembleID + ".");
+        } else {
+            System.out.println("Ensemble " + ensembleID + " is not found!!");
+        }
     }
     
     private static Command handleAddMusician(MEMSSystem system, Scanner scanner) {

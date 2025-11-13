@@ -1,6 +1,5 @@
 public class InstrumentHelper {
     
-    // 根據 Ensemble 類型和 role 返回樂器名稱
     public static String getInstrumentName(Ensemble ensemble, int role) {
         if (ensemble instanceof OrchestraEnsemble) {
             switch (role) {
@@ -19,7 +18,6 @@ public class InstrumentHelper {
         return "unknown";
     }
     
-    // 根據 Musician 和 Ensemble 返回樂器名稱
     public static String getInstrumentName(Musician musician, Ensemble ensemble) {
         return getInstrumentName(ensemble, musician.getRole());
     }

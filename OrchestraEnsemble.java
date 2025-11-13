@@ -9,7 +9,7 @@ public class OrchestraEnsemble extends Ensemble {
     }
     
     @Override
-public void updateMusicianRole() {
+    public void updateMusicianRole() {
     Iterator<Musician> it = super.getMusicians();
     while (it.hasNext()) {
         Musician m = it.next();

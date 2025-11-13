@@ -1,44 +1,44 @@
 public class SetCurrentEnsembleCommand implements Command {
-    private MEMSSystem receiver;
-    private String ensembleID;
-    private Ensemble previousEnsemble;
-    private Ensemble newEnsemble;
+    private MEMSSystem geter;
+    private String eID;
+    private Ensemble previousE;
+    private Ensemble newE;
     
-    public SetCurrentEnsembleCommand(MEMSSystem receiver, String ensembleID) {
-        this.receiver = receiver;
-        this.ensembleID = ensembleID;
+    public SetCurrentEnsembleCommand(MEMSSystem geter, String eID) {
+        this.geter = geter;
+        this.eID = eID;
     }
     
     @Override
     public void execute() {
-        previousEnsemble = receiver.getCurrentEnsemble();
-        boolean success = receiver.setCurrentEnsemble(ensembleID);
+        previousE = geter.getCurrentEnsemble();
+        boolean success = geter.setCurrentEnsemble(eID);
         
         if (!success) {
-            throw new RuntimeException("Ensemble " + ensembleID + " not found");
+            throw new RuntimeException("Ensemble " + eID + " not found");
         }
         
-        newEnsemble = receiver.getCurrentEnsemble();
+        newE = geter.getCurrentEnsemble();
     }
     
     @Override
     public void undo() {
-        if (previousEnsemble != null) {
-            receiver.setCurrentEnsembleDirectly(previousEnsemble);
-            System.out.println("Command (Set current ensemble, " + ensembleID + ") is undone.");
+        if (previousE != null) {
+            geter.setCurrentEnsembleDirectly(previousE);
+            System.out.println("Command (Set current ensemble, " + eID + ") is undone.");
         }
     }
     
     @Override
     public void redo() {
-        if (newEnsemble != null) {
-            receiver.setCurrentEnsembleDirectly(newEnsemble);
-            System.out.println("Command (Set current ensemble, " + ensembleID + ") is redone.");
+        if (newE != null) {
+            geter.setCurrentEnsembleDirectly(newE);
+            System.out.println("Command (Set current ensemble, " + eID + ") is redone.");
         }
     }
     
     @Override
     public String getDescription() {
-        return "Set current ensemble, " + ensembleID;
+        return "Set current ensemble, " + eID;
     }
 }

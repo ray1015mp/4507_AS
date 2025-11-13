@@ -4,11 +4,11 @@ public class Main {
     public static void main(String[] args) {
         MEMSSystem system = new MEMSSystem();
         CommandInvoker invoker = new CommandInvoker();
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         
         while (true) {
             printMenu(system);
-            String input = scanner.nextLine().trim();
+            String input = sc.nextLine().trim();
             
             try {
                 if (input.equalsIgnoreCase("x")) {
@@ -21,7 +21,7 @@ public class Main {
                 } else if (input.equalsIgnoreCase("l")) {
                     invoker.showUndoRedoList();
                 } else {
-                    handleCommand(input, system, invoker, scanner);
+                    Command(input, system, invoker, sc);
                 }
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
@@ -30,7 +30,7 @@ public class Main {
             System.out.println();
         }
         
-        scanner.close();
+        sc.close();
     }
     
     private static void printMenu(MEMSSystem system) {
@@ -44,34 +44,31 @@ public class Main {
                 system.getCurrentEnsemble().getEnsembleID() + " " + 
                 system.getCurrentEnsemble().geteName() + ".");
         }
-        
         System.out.print("Please enter command [ c | s | a | m | d | se | sa | cn | u | r | l | x ] :- ");
     }
     
-    private static void handleCommand(String cmd, MEMSSystem system, 
-                                  CommandInvoker invoker, Scanner scanner) {
+    private static void Command(String cmd, MEMSSystem system, CommandInvoker invoker, Scanner scanner) {
         Command command = null;
         
         switch (cmd.toLowerCase()) {
             case "c":
-                command = handleCreateEnsemble(system, scanner);
+                command = CreateEnsemble(system, scanner);
                 break;
                 
             case "s":
-                
-                handleSetCurrentEnsemble(system, scanner);
+                SetCurrentEnsemble(system, scanner);
                 return;
                 
             case "a":
-                command = handleAddMusician(system, scanner);
+                command = AddMusician(system, scanner);
                 break;
                 
             case "m":
-                command = handleModifyMusician(system, scanner);
+                command = ModifyMusician(system, scanner);
                 break;
                 
             case "d":
-                command = handleDeleteMusician(system, scanner);
+                command = DeleteMusician(system, scanner);
                 break;
                 
             case "se":
@@ -83,7 +80,7 @@ public class Main {
                 return;
                 
             case "cn":
-                command = handleChangeEnsembleName(system, scanner);
+                command = ChangeEnsembleName(system, scanner);
                 break;
                 
             default:
@@ -96,7 +93,7 @@ public class Main {
         }
     }
     
-    private static Command handleCreateEnsemble(MEMSSystem system, Scanner scanner) {
+    private static Command CreateEnsemble(MEMSSystem system, Scanner scanner) {
         System.out.print("Enter music type (o = orchestra | j = jazz band) :- ");
         String type = scanner.nextLine().trim();
         
@@ -110,7 +107,7 @@ public class Main {
     }
     
     
-    private static void handleSetCurrentEnsemble(MEMSSystem system, Scanner scanner) {
+    private static void SetCurrentEnsemble(MEMSSystem system, Scanner scanner) {
         System.out.print("Please input ensemble ID:- ");
         String ensembleID = scanner.nextLine().trim();
         
@@ -123,7 +120,7 @@ public class Main {
         }
     }
     
-    private static Command handleAddMusician(MEMSSystem system, Scanner scanner) {
+    private static Command AddMusician(MEMSSystem system, Scanner scanner) {
         System.out.print("Please input musician information (id, name):- ");
         String info = scanner.nextLine().trim();
         String[] parts = info.split(",");
@@ -151,7 +148,7 @@ public class Main {
         return CommandFactory.createCommand("a", system, musicianID, name, roleStr);
     }
     
-    private static Command handleModifyMusician(MEMSSystem system, Scanner scanner) {
+    private static Command ModifyMusician(MEMSSystem system, Scanner scanner) {
         System.out.print("Please input musician ID:- ");
         String musicianID = scanner.nextLine().trim();
         
@@ -170,14 +167,14 @@ public class Main {
         return CommandFactory.createCommand("m", system, musicianID, roleStr);
     }
     
-    private static Command handleDeleteMusician(MEMSSystem system, Scanner scanner) {
+    private static Command DeleteMusician(MEMSSystem system, Scanner scanner) {
         System.out.print("Please input musician ID:- ");
         String musicianID = scanner.nextLine().trim();
         
         return CommandFactory.createCommand("d", system, musicianID);
     }
     
-    private static Command handleChangeEnsembleName(MEMSSystem system, Scanner scanner) {
+    private static Command ChangeEnsembleName(MEMSSystem system, Scanner scanner) {
         System.out.print("Please input new name of the current ensemble:- ");
         String newName = scanner.nextLine().trim();
         

@@ -1,73 +1,73 @@
 import java.util.*;
 
 public class DeleteMusicianCommand implements Command {
-    private MEMSSystem receiver;
-    private String musicianID;
-    private Musician deletedMusician;
-    private String musicianName;
-    private String instrumentName;
-    private Ensemble targetEnsemble;
-    private MusicianMemento memento;
-    private List<Musician> musicianListSnapshot;
+    private MEMSSystem geter;
+    private String mID;
+    private Musician DeletedM;
+    private String mName;
+    private String instrument_Name;
+    private Ensemble TargetE;
+    private MusicianMemento M_memento;
+    private List<Musician> M_List_Snapshot;
     
-    public DeleteMusicianCommand(MEMSSystem receiver, String musicianID) {
-        this.receiver = receiver;
-        this.musicianID = musicianID;
+    public DeleteMusicianCommand(MEMSSystem geter, String mID) {
+        this.geter = geter;
+        this.mID = mID;
     }
     
     @Override
     public void execute() {
-        targetEnsemble = receiver.getCurrentEnsemble();
-        deletedMusician = receiver.findMusician(musicianID);
+        TargetE = geter.getCurrentEnsemble();
+        DeletedM = geter.findMusician(mID);
 
-        if (deletedMusician != null && targetEnsemble != null) {
-            musicianName = deletedMusician.getName();
-            memento = new MusicianMemento(deletedMusician);
-            instrumentName = InstrumentHelper.getInstrumentName(targetEnsemble, memento.getRole());
+        if (DeletedM != null && TargetE != null) {
+            mName = DeletedM.getName();
+            M_memento = new MusicianMemento(DeletedM);
+            instrument_Name = InstrumentHelper.getInstrumentName(TargetE, M_memento.getRole());
             
-            musicianListSnapshot = new ArrayList<>();
-            Iterator<Musician> it = targetEnsemble.getMusicians();
+            M_List_Snapshot = new ArrayList<>();
+            Iterator<Musician> it = TargetE.getMusicians();
             while (it.hasNext()) {
-                musicianListSnapshot.add(it.next());
+                M_List_Snapshot.add(it.next());
             }
             
-            receiver.removeMusician(musicianID);
+            geter.removeMusician(mID);
             System.out.println("Musician is deleted.");
         }
     }
     
     @Override
     public void undo() {
-        if (deletedMusician != null && targetEnsemble != null && memento != null && musicianListSnapshot != null) {
-            memento.restore();
+        if (DeletedM != null && TargetE != null && M_memento != null && M_List_Snapshot != null) {
+            M_memento.restore();
             
-            Iterator<Musician> it = targetEnsemble.getMusicians();
+            Iterator<Musician> it = TargetE.getMusicians();
             List<Musician> toRemove = new ArrayList<>();
             while (it.hasNext()) {
                 toRemove.add(it.next());
             }
             for (Musician m : toRemove) {
-                targetEnsemble.dropMusician(m);
+                TargetE.dropMusician(m);
             }
             
-            for (Musician m : musicianListSnapshot) {
-                targetEnsemble.addMusician(m);
+            for (Musician m : M_List_Snapshot) {
+                TargetE.addMusician(m);
             }
             
-            System.out.println("Command (Delete musician, " + musicianID + ") is undone.");
+            System.out.println("Command (Delete musician, " + mID + ") is undone.");
         }
     }
     
     @Override
     public void redo() {
-        if (deletedMusician != null && targetEnsemble != null) {
-            targetEnsemble.dropMusician(deletedMusician);
-            System.out.println("Command (Delete musician, " + musicianID + ") is redone.");
+        if (DeletedM != null && TargetE != null) {
+            TargetE.dropMusician(DeletedM);
+            System.out.println("Command (Delete musician, " + mID + ") is redone.");
         }
     }
     
     @Override
     public String getDescription() {
-        return "Delete musician, " + musicianID;
+        return "Delete musician, " + mID;
     }
 }

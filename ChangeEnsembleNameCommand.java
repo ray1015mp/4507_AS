@@ -1,23 +1,22 @@
 public class ChangeEnsembleNameCommand implements Command {
-    private MEMSSystem receiver;
+    private MEMSSystem geter;
     private String newName;
+    private EnsembleMemento E_memento;  
+    private String eID;
     
-    private EnsembleMemento memento;  
-    private String ensembleID;
-    
-    public ChangeEnsembleNameCommand(MEMSSystem receiver, String newName) {
-        this.receiver = receiver;
+    public ChangeEnsembleNameCommand(MEMSSystem geter, String newName) {
+        this.geter = geter;
         this.newName = newName;
     }
     
     @Override
     public void execute() {
-        Ensemble current = receiver.getCurrentEnsemble();
+        Ensemble current = geter.getCurrentEnsemble();
         if (current != null) {
-            ensembleID = current.getEnsembleID();
+            eID = current.getEnsembleID();
             
             
-            memento = new EnsembleMemento(current);
+            E_memento = new EnsembleMemento(current);
             
             
             current.seteName(newName);
@@ -27,24 +26,24 @@ public class ChangeEnsembleNameCommand implements Command {
     
     @Override
     public void undo() {
-        if (memento != null) {
+        if (E_memento != null) {
             
-            memento.restore();
-            System.out.println("Command (Change ensemble's name, " + ensembleID + ", " + newName + ") is undone.");
+            E_memento.restore();
+            System.out.println("Command (Change ensemble's name, " + eID + ", " + newName + ") is undone.");
         }
     }
     
     @Override
     public void redo() {
-        Ensemble current = receiver.getCurrentEnsemble();
-        if (current != null && current.getEnsembleID().equals(ensembleID)) {
+        Ensemble current = geter.getCurrentEnsemble();
+        if (current != null && current.getEnsembleID().equals(eID)) {
             current.seteName(newName);
-            System.out.println("Command (Change ensemble's name, " + ensembleID + ", " + newName + ") is redone.");
+            System.out.println("Command (Change ensemble's name, " + eID + ", " + newName + ") is redone.");
         }
     }
     
     @Override
     public String getDescription() {
-        return "Change ensemble's name, " + ensembleID + ", " + newName;
+        return "Change ensemble's name, " + eID + ", " + newName;
     }
 }

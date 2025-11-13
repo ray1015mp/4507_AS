@@ -1,32 +1,31 @@
 public class ModifyMusicianCommand implements Command {
-    private MEMSSystem receiver;
-    private String musicianID;
-    private int newInstrumentRole;
+    private MEMSSystem geter ;
+    private String mID;
+    private int New_instruments_Role;
+    private MusicianMemento M_Memento;  
+    private String Old_instruments_Name;
+    private String New_instruments_Name;
+    private Ensemble targetE;
     
-    private MusicianMemento memento;  
-    private String oldInstrumentName;
-    private String newInstrumentName;
-    private Ensemble targetEnsemble;
-    
-    public ModifyMusicianCommand(MEMSSystem receiver, String musicianID, int newInstrumentRole) {
-        this.receiver = receiver;
-        this.musicianID = musicianID;
-        this.newInstrumentRole = newInstrumentRole;
+    public ModifyMusicianCommand(MEMSSystem geter, String mID, int New_instruments_Role) {
+        this.geter = geter;
+        this.mID = mID;
+        this.New_instruments_Role = New_instruments_Role;
     }
     
     @Override
     public void execute() {
-        targetEnsemble = receiver.getCurrentEnsemble();
-        Musician musician = receiver.findMusician(musicianID);
+        targetE = geter.getCurrentEnsemble();
+        Musician musician = geter.findMusician(mID);
         
-        if (musician != null && targetEnsemble != null) {
+        if (musician != null && targetE != null) {
             
-            memento = new MusicianMemento(musician);
-            oldInstrumentName = InstrumentHelper.getInstrumentName(targetEnsemble, memento.getRole());
+            M_Memento = new MusicianMemento(musician);
+            Old_instruments_Name = InstrumentHelper.getInstrumentName(targetE, M_Memento.getRole());
             
             
-            musician.setRole(newInstrumentRole);
-            newInstrumentName = InstrumentHelper.getInstrumentName(targetEnsemble, newInstrumentRole);
+            musician.setRole(New_instruments_Role);
+            New_instruments_Name = InstrumentHelper.getInstrumentName(targetE, New_instruments_Role);
             
             System.out.println("Instrument is updated.");
         }
@@ -34,24 +33,24 @@ public class ModifyMusicianCommand implements Command {
     
     @Override
     public void undo() {
-        if (memento != null) {
+        if (M_Memento != null) {
             
-            memento.restore();
-            System.out.println("Command (Modify musician's instrument, " + musicianID + ", " + newInstrumentName + ") is undone.");
+            M_Memento.restore();
+            System.out.println("Command (Modify musician's instrument, " + mID + ", " + New_instruments_Name + ") is undone.");
         }
     }
     
     @Override
     public void redo() {
-        Musician musician = receiver.findMusician(musicianID);
+        Musician musician = geter.findMusician(mID);
         if (musician != null) {
-            musician.setRole(newInstrumentRole);
-            System.out.println("Command (Modify musician's instrument, " + musicianID + ", " + newInstrumentName + ") is redone.");
+            musician.setRole(New_instruments_Role);
+            System.out.println("Command (Modify musician's instrument, " + mID + ", " + New_instruments_Name + ") is redone.");
         }
     }
     
     @Override
     public String getDescription() {
-        return "Modify musician's instrument, " + musicianID + ", " + newInstrumentName;
+        return "Modify musician's instrument, " + mID + ", " + New_instruments_Name;
     }
 }

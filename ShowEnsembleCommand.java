@@ -1,13 +1,13 @@
 public class ShowEnsembleCommand implements Command {
-    private MEMSSystem receiver;
+    private MEMSSystem geter;
     
-    public ShowEnsembleCommand(MEMSSystem receiver) {
-        this.receiver = receiver;
+    public ShowEnsembleCommand(MEMSSystem geter) {
+        this.geter = geter;
     }
     
     @Override
     public void execute() {
-        receiver.showCurrentEnsemble();
+        geter.showCurrentEnsemble();
     }
     
     @Override
